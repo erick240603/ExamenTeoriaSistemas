@@ -144,7 +144,7 @@ label_entrada.pack(anchor="w", padx=10, pady=(10, 0))
 entrada_texto = tk.Text(ventana, height=8, font=("Consolas", 10))
 entrada_texto.pack(fill="x", padx=10, pady=5)
 
-# Ejemplo precargado con las características de la Variante 2
+# Ejemplo precargado
 codigo_prueba = """int contador = 0 # Comentario de linea
 if contador < 10 and contador != 5:
     contador := contador ** 2 // 3
