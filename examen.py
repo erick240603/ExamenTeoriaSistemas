@@ -26,7 +26,7 @@ def analizar_lexico(codigo):
             i += 1
             continue
 
-        # 3. Manejo de Comentarios de Línea (#) - Variante Python
+        # 3. Manejo de Comentarios de Línea (#) 
         if caracter == '#':
             while i < longitud and codigo[i] != '\n':
                 i += 1
@@ -36,7 +36,7 @@ def analizar_lexico(codigo):
         # 4. Operadores Distintivos de 2 Caracteres (//, **, :=) y Relacionales Compuestos
         if i + 1 < longitud:
             par = codigo[i:i+2]
-            if par in ['//', '**', ':=']:
+            if par in ['//', '**', ':=','&','&&','?','.','?.']:
                 tokens.append((linea, columna, "DISTINCT_OP", par))
                 i += 2
                 columna += 2
@@ -57,8 +57,8 @@ def analizar_lexico(codigo):
                 i += 1
                 columna += 1
 
-            if lexema == "and":
-                tipo = "LOGICAL_OP"  # Regla específica para 'and'
+            if lexema == "null":
+                tipo = "NULL_CHARACTER"  # Regla específica para 'and'
             elif lexema in PALABRAS_RESERVADAS:
                 tipo = "KEYWORD"
             else:
@@ -98,15 +98,27 @@ def analizar_lexico(codigo):
             i += 1
             columna += 1
             continue
-
+        
+        if lexema in ['null','NULL']:
+            tokens.append((linea, columna, "ARITHOP", caracter))
+            i += 1
+            columna += 1
+            continue
+        
         # 9. Elemento Especial (Dos puntos :) y Delimitadores
         if caracter == ':':
             tokens.append((linea, columna, "BLOCK_COLON", caracter))
             i += 1
             columna += 1
             continue
+        
+        if caracter == '"':
+                    tokens.append((linea, columna, "IDENTIFIER_CHARACTER", caracter))
+                    i += 1
+                    columna += 1
+                    continue
 
-        if caracter in [';', ',', '(', ')', '{', '}']:
+        if caracter in [';', ',', '(', ')', '{', '}','"']:
             tokens.append((linea, columna, "DELIMITER", caracter))
             i += 1
             columna += 1
